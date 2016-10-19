@@ -17,6 +17,13 @@
   margin: 20px;
 }
 
+#promptlink {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: blue;
+}
+
 </style>
 <script language="javascript" type="text/javascript">
 
@@ -50,11 +57,7 @@ function onClose(evt)
 
 function onMessage(evt)
 {
-  if(evt.data == "PROMT"){
-    promtUser();
-    return;
-  }
-  writeToScreen(evt.data);
+  writeToScreen(evt.data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 }
 
 function onError(evt)
@@ -64,7 +67,6 @@ function onError(evt)
 
 function doSend(message)
 {
-  writeToScreen("SENT: " + message);
   websocket.send(message);
 }
 
@@ -73,9 +75,9 @@ function writeToScreen(message)
   output.innerHTML = message;
 }
 
-function promtUser()
+function promptuser()
 {
-  var answer = prompt('What is your answer?')
+  var answer = prompt('paste a spotify link for this disk')
   if(answer)
     doSend(answer)
 }
@@ -85,3 +87,4 @@ window.addEventListener("load", init, false);
 </script>
 
 <div id="output"></div>
+<a id="promptlink" href="javascript:promptuser()">Burn on disk</a>
