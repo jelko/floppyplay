@@ -1,0 +1,7 @@
+tmp/
+venv/
+.DS_Store
+
+spotify_appkey.key
+floppymapping.pkl
+credentials.py
