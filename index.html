@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>💾</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
+<style>
+
+* {
+  font-family: "Fira Mono", monospace;
+  font-size: 50px;
+  word-wrap: break-word;
+  padding: 0;
+  margin: 0;
+}
+
+#output {
+  margin: 20px;
+}
+
+</style>
+<script language="javascript" type="text/javascript">
+
+var wsUri = "ws://floppyws.localtunnel.me";
+var output;
+
+function init()
+{
+  output = document.getElementById("output");
+  testWebSocket();
+}
+
+function testWebSocket()
+{
+  websocket = new WebSocket(wsUri);
+  websocket.onopen = function(evt) { onOpen(evt) };
+  websocket.onclose = function(evt) { onClose(evt) };
+  websocket.onmessage = function(evt) { onMessage(evt) };
+  websocket.onerror = function(evt) { onError(evt) };
+}
+
+function onOpen(evt)
+{
+  writeToScreen("CONNECTED");
+}
+
+function onClose(evt)
+{
+  writeToScreen("DISCONNECTED");
+}
+
+function onMessage(evt)
+{
+  if(evt.data == "PROMT"){
+    promtUser();
+    return;
+  }
+  writeToScreen(evt.data);
+}
+
+function onError(evt)
+{
+  writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+}
+
+function doSend(message)
+{
+  writeToScreen("SENT: " + message);
+  websocket.send(message);
+}
+
+function writeToScreen(message)
+{
+  output.innerHTML = message;
+}
+
+function promtUser()
+{
+  var answer = prompt('What is your answer?')
+  if(answer)
+    doSend(answer)
+}
+
+window.addEventListener("load", init, false);
+
+</script>
+
+<div id="output"></div>
